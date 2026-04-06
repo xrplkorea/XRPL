@@ -42,6 +42,7 @@ xrpl-ts/
 │   ├── Payment/              # XRP/IOU 송금
 │   ├── TrustSet/             # 신뢰선 설정
 │   ├── AccountSet/           # 계정 옵션 설정
+│   ├── Clawback/             # IOU 강제 회수
 │   ├── Credential/           # Credential 발급/검증
 │   ├── PermissionedDEX/      # 권한 기반 DEX
 │   ├── PermissionedDomains/  # Domain 기반 권한 관리
@@ -75,6 +76,7 @@ xrpl-ts/
 - [Payment](./xrpl-ts/mainnet-testnet/Payment/README.md) — XRP/IOU 송금
 - [TrustSet](./xrpl-ts/mainnet-testnet/TrustSet/README.md) — 신뢰선 설정
 - [AccountSet](./xrpl-ts/mainnet-testnet/AccountSet/README.md) — 계정 옵션
+- [Clawback](./xrpl-ts/mainnet-testnet/Clawback/README.md) — IOU 강제 회수
 - [Credential](./xrpl-ts/mainnet-testnet/Credential/README.md) — Credential 발급/검증
 - [PermissionedDEX](./xrpl-ts/mainnet-testnet/PermissionedDEX/README.md) — 권한 기반 DEX
 - [PermissionedDomains](./xrpl-ts/mainnet-testnet/PermissionedDomains/README.md) — Domain 기반 권한 관리

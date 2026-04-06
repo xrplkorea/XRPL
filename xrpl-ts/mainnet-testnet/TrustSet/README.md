@@ -44,4 +44,27 @@ npx ts-node xrpl-ts/mainnet-testnet/TrustSet/authorizeTrustLine.ts
 
 ## 🔍 추가 참고
 
+### Freeze (동결)
+
+발행자가 특정 계정 또는 전체 계정의 IOU 거래를 동결하는 기능입니다. 규제 대응, 사기 방지 등의 목적으로 사용합니다.
+
+**종류:**
+
+| 구분 | Individual Freeze | Global Freeze |
+|------|-------------------|---------------|
+| 설정 방법 | `TrustSet` + `tfSetFreeze (0x00100000)` | `AccountSet` + `SetFlag: asfGlobalFreeze (7)` |
+| 대상 | 특정 계정의 특정 통화 TrustLine | 발행자의 모든 IOU 전체 |
+| 해제 | `TrustSet` + `tfClearFreeze (0x00200000)` | `AccountSet` + `ClearFlag: asfGlobalFreeze (7)` |
+| 용도 | 개별 계정 제재 | 긴급 전체 동결 |
+
+**Freeze된 상태에서:**
+* ❌ Freeze된 계정은 해당 IOU를 다른 계정에 전송 불가
+* ❌ Freeze된 IOU로 DEX 주문 생성 불가
+* ✅ 발행자에게는 직접 전송 가능 (발행자는 항상 수신 가능)
+* ✅ 발행자가 Freeze된 계정에 IOU 발행 가능
+
+**NoFreeze 플래그 (`asfNoFreeze`, SetFlag: 6):**
+* 발행자가 "앞으로 절대 Freeze를 사용하지 않겠다"고 선언하는 플래그
+* **한번 켜면 다시는 끌 수 없음** — Individual Freeze, Global Freeze 모두 사용 불가
+* AllowTrustLineClawback(`asfAllowTrustLineClawback`)과 동시 사용 불가
 

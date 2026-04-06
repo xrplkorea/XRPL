@@ -35,3 +35,20 @@ npx ts-node xrpl-ts/TrustSet/authorizeTrustLine.ts
 
 ## 🔍 추가 참고
 
+### RequireAuth란?
+
+* **SetFlag: 2 (`asfRequireAuth`)** — 발행자가 IOU를 수신할 수 있는 계정을 사전 승인하도록 강제하는 플래그입니다.
+* 규제/컴플라이언스 환경에서 KYC를 통과한 계정에만 IOU를 허용할 때 사용합니다.
+
+**RequireAuth가 켜진 경우 IOU 발행 흐름:**
+
+1. **Admin(발행자)**: `AccountSet`으로 `asfRequireAuth` 활성화
+2. **User(수신자)**: `TrustSet`으로 신뢰선 생성 요청 (이 시점에서는 아직 IOU 수신 불가)
+3. **Admin(발행자)**: `TrustSet + tfSetAuth (0x00010000)`로 해당 User의 신뢰선을 승인
+4. 승인 완료 후 User가 IOU를 정상 수신 가능
+
+**주의사항:**
+* **한번 켜면 끌 수 없음** — `ClearFlag: 2`로 해제 시도 시 `tecOWNERS` 또는 무시됨
+* **기존 TrustLine에는 소급 적용되지 않음** — RequireAuth 활성화 전에 이미 생성된 TrustLine은 승인 없이도 유효
+* NoFreeze(`asfNoFreeze`)와 함께 사용 가능하지만, AllowTrustLineClawback과는 상호 보완적 관계
+
