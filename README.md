@@ -1,129 +1,118 @@
-# XRPL 핵심 기능별 샘플 코드
+# XRPL Korea Financial Innovation Program — Sample Code
 
-> XRPL에서 주요 기능(지갑 생성/관리, 송금, Trustset, Credential 등)을 테스트할 수 있는 시나리오 기반 예제 코드 모음입니다.
+> XRPL 핵심 기능별 시나리오 기반 TypeScript 예제 코드 모음입니다.
+> **Testnet / Mainnet**에서 동작하는 기능과 **Devnet 전용** 기능이 분리되어 있습니다.
 
----
-
-## 📑 목차
-
-- [🚀 Quickstart](./README.md#-quickstart)
-- [🗂️ 전체 디렉토리 구조](#-전체-디렉토리-구조)
-- [📂 폴더별 README 바로가기](./README.md#-폴더별-readme-바로가기)
-- [XRPL Devnet Explorer](./README.md#xrpl-devnet-explorer)
-- [🌐 네트워크 / 버전](./README.md#-네트워크--버전)
 ---
 
 ## 🚀 Quickstart
 
 ```bash
-# 0) 레포 클론
+# 1) 레포 클론
 git clone https://github.com/jun637/XRPL.git
 cd XRPL
 
-# 1) 의존성 설치
+# 2) 의존성 설치
+cd xrpl-ts
 npm install
 
-# 2) Devnet 지갑 생성 (Admin, User, User2 총 3개)
-npx ts-node xrpl/Wallet/createNewWallet.ts  -> 여기서 출력되는 시드 값을 .env에 저장
+# 3) .env 설정
+cp ../.env.example ../.env
+# .env 파일에 지갑 시드를 입력하세요 (아래 "지갑 생성" 참고)
 
-# 3) faucet으로 자산 활성화
-npx ts-node xrpl/Wallet/faucet.ts
+# 4) Testnet 지갑 생성
+npx ts-node mainnet-testnet/Wallet/createNewWallet.ts
+# 출력되는 시드 값을 .env에 저장
 
-# 4) 지갑 정보 조회
-npx ts-node xrpl/Wallet/WalletInfo.ts
+# 5) Faucet으로 테스트 XRP 충전
+npx ts-node mainnet-testnet/Wallet/faucet.ts
+
+# 6) 지갑 정보 조회
+npx ts-node mainnet-testnet/Wallet/WalletInfo.ts
 ```
-* Quickstart 이후 기능별 실행 명령어 및 간단한 시나리오 이해는 [*GitHub 폴더별 README*](#-폴더별-readme-바로가기)에서,  
-* 폴더별 전체 코드 및 상세 실행 로그를 포함한 스크립트 해석은 [*Notion 문서*](https://catalyze-research.notion.site/XRPL-23e898c680bf8023b1b5f94b0b544db3?source=copy_link)에서 확인하세요.
-
 
 ---
 
-## 🗂️ 전체 디렉토리 구조
+## 🗂️ 디렉토리 구조
 
-```bash
-xrpl/
-├── Wallet/ # 지갑 생성/관리
-│ ├── createNewWallet.ts
-│ ├── faucet.ts
-│ ├── LoadWallet.ts
-│ └── WalletInfo.ts
-│
-├── Payment/ # XRP/IOU 송금
-│ ├── sendIOU.ts
-│ └── sendXRP.ts
-│
-├── TrustSet/ # 신뢰선 설정
-├ ├── requireAuth.ts
-│ └── TrustSet.ts
-│
-├── AccountSet/ # 계정 옵션 설정
-│ └── AccountSet.ts
-│
-├── Credential/ # Credential 발급/검증
-│ ├── acceptCredential.ts
-│ ├── checkCredential.ts
-│ ├── createCredential.ts
-│ └── deleteCredential.ts
-│
-├── PermissionedDEX/ # 권한 기반 DEX
-│ ├── bookOffers.ts
-│ ├── cancelOffer.ts
-│ └── createPermissionedOffer.ts
-│
-├── PermissionedDomains/# Domain 기반 권한 관리
-│ ├── AcceptedCredentials.ts
-│ ├── createDomain.ts
-│ └── deleteDomain.ts
-│
-├── TokenEscrow/ # 에스크로
-│ ├── escrowCancel.ts
-│ ~~├── escrowCreateIOU.ts~~
-│ ├── escrowCreateMPT.ts
-│ └── escrowFinish.ts
-│
-├── MPTokensV1/ # Multi-Party Tokens (v1)
-│ ├── authorizeHolder.ts
-│ ├── createIssuance.ts
-│ ├── destroyIssuance.ts
-│ ├── sendMPT.ts
-│ └── setIssuance.ts
-│
-├── Batch/ # 배치 트랜잭션
-│ ├── AllOrNothing.ts
-│ ├── Independent.ts
-│ ├── OnlyOne.ts
-│ └── UntilFailure.ts
-│
-├── Server/ # 서버 정보 확인
-│ └── serverInfo.ts
-│
 ```
+xrpl-ts/
+├── mainnet-testnet/          # Mainnet & Testnet에서 사용 가능한 기능
+│   ├── Wallet/               # 지갑 생성/관리
+│   ├── Payment/              # XRP/IOU 송금
+│   ├── TrustSet/             # 신뢰선 설정
+│   ├── AccountSet/           # 계정 옵션 설정
+│   ├── Credential/           # Credential 발급/검증
+│   ├── PermissionedDEX/      # 권한 기반 DEX
+│   ├── PermissionedDomains/  # Domain 기반 권한 관리
+│   ├── TokenEscrow/          # 에스크로 (IOU/MPT)
+│   ├── MPToken/              # Multi-Purpose Tokens
+│   ├── AMM/                  # 자동화 시장 메이커
+│   ├── NFToken/              # NFT
+│   ├── DID/                  # 분산 식별자
+│   ├── DEX/                  # 오더북 DEX
+│   ├── Check/                # 수표
+│   ├── PaymentChannel/       # 결제 채널
+│   ├── PriceOracle/          # 가격 오라클
+│   ├── Multisig/             # 멀티시그
+│   └── Server/               # 서버 정보 확인
+│
+├── devnet-only/              # Devnet에서만 사용 가능한 기능
+│   ├── Batch/                # 배치 트랜잭션
+│   ├── LendingProtocol/      # 대출 프로토콜
+│   └── SingleAssetVault/     # 단일 자산 볼트
+│
+├── package.json
+└── tsconfig.json
+```
+
 ---
-## 📂 폴더별 README 바로가기
 
-- [Wallet](./xrpl/Wallet/README.md)
-- [TrustSet](./xrpl/TrustSet/README.md)
-- [TokenEscrow](./xrpl/TokenEscrow/README.md)
-- [Server](./xrpl/Server/README.md)
-- [PermissionedDomains](./xrpl/PermissionedDomains/README.md)
-- [PermissionedDEX](./xrpl/PermissionedDEX/README.md)
-- [Payment](./xrpl/Payment/README.md)
-- [MPTokensV1](./xrpl/MPTokensV1/README.md)
-- [Credential](./xrpl/Credential/README.md)
-- [Batch](./xrpl/Batch/README.md)
-- [AccountSet](./xrpl/AccountSet/README.md)
+## 📂 폴더별 README
+
+### Mainnet & Testnet
+- [Wallet](./xrpl-ts/mainnet-testnet/Wallet/README.md) — 지갑 생성/관리
+- [Payment](./xrpl-ts/mainnet-testnet/Payment/README.md) — XRP/IOU 송금
+- [TrustSet](./xrpl-ts/mainnet-testnet/TrustSet/README.md) — 신뢰선 설정
+- [AccountSet](./xrpl-ts/mainnet-testnet/AccountSet/README.md) — 계정 옵션
+- [Credential](./xrpl-ts/mainnet-testnet/Credential/README.md) — Credential 발급/검증
+- [PermissionedDEX](./xrpl-ts/mainnet-testnet/PermissionedDEX/README.md) — 권한 기반 DEX
+- [PermissionedDomains](./xrpl-ts/mainnet-testnet/PermissionedDomains/README.md) — Domain 기반 권한 관리
+- [TokenEscrow](./xrpl-ts/mainnet-testnet/TokenEscrow/README.md) — 에스크로
+- [MPToken](./xrpl-ts/mainnet-testnet/MPToken/README.md) — Multi-Purpose Tokens
+- [AMM](./xrpl-ts/mainnet-testnet/AMM/README.md) — 자동화 시장 메이커
+- [NFToken](./xrpl-ts/mainnet-testnet/NFToken/README.md) — NFT
+- [DID](./xrpl-ts/mainnet-testnet/DID/README.md) — 분산 식별자
+- [DEX](./xrpl-ts/mainnet-testnet/DEX/README.md) — 오더북 DEX
+- [Check](./xrpl-ts/mainnet-testnet/Check/README.md) — 수표
+- [PaymentChannel](./xrpl-ts/mainnet-testnet/PaymentChannel/README.md) — 결제 채널
+- [PriceOracle](./xrpl-ts/mainnet-testnet/PriceOracle/README.md) — 가격 오라클
+- [Multisig](./xrpl-ts/mainnet-testnet/Multisig/README.md) — 멀티시그
+- [Server](./xrpl-ts/mainnet-testnet/Server/README.md) — 서버 정보
+
+### Devnet Only
+- [Batch](./xrpl-ts/devnet-only/Batch/README.md) — 배치 트랜잭션
+- [LendingProtocol](./xrpl-ts/devnet-only/LendingProtocol/README.md) — 대출 프로토콜
+- [SingleAssetVault](./xrpl-ts/devnet-only/SingleAssetVault/README.md) — 단일 자산 볼트
 
 ---
-## XRPL Devnet Explorer
 
-👉 https://devnet.xrpl.org/
+## 🔍 XRPL Explorer
+
+| 네트워크 | Explorer |
+|----------|----------|
+| Testnet  | https://testnet.xrpl.org/ |
+| Mainnet  | https://livenet.xrpl.org/ |
+| Devnet   | https://devnet.xrpl.org/ |
 
 ---
+
 ## 🌐 네트워크 / 버전
- 
-| 항목       | 값 |
-|------------|------------------------------------------------|
-| 네트워크   | XRPL Devnet (wss://s.devnet.rippletest.net:51233) |
-| rippled    | v2.5.0 |
-| xrpl.js    | package.json 참조 |
-| Node.js    | LTS 권장 |
+
+| 항목 | 값 |
+|------|---|
+| 네트워크 (mainnet-testnet) | XRPL Testnet (`wss://s.altnet.rippletest.net:51233`) |
+| 네트워크 (devnet-only) | XRPL Devnet (`wss://s.devnet.rippletest.net:51233`) |
+| xrpl.js | 4.6.0 |
+| ripple-binary-codec | 2.7.0 |
+| Node.js | LTS 권장 |
